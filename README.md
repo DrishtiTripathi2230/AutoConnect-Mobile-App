@@ -23,6 +23,17 @@ The app focuses on **simplicity, inclusivity, safety, and trust**, making it sui
 
 India’s local transport ecosystem is diverse but fragmented. AutoConnect brings all commonly used **short-distance transport options into one simple app**, designed specifically for Indian users.
 
+## Image
+###(few screenshots)
+
+<img width="292" height="651" alt="Screenshot 2025-12-23 205849" src="https://github.com/user-attachments/assets/9fd42ef5-c363-4da7-a76c-15c5f64cca80" />
+
+--
+<img width="295" height="657" alt="Screenshot 2025-12-23 205933" src="https://github.com/user-attachments/assets/7031b039-d41d-462a-bbf6-a19b1d314e51" />
+
+--
+
+
 ### Key Objectives:
 - Simplify local ride booking
 - Support all forms of local vehicles
