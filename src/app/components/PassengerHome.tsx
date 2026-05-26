@@ -1,13 +1,39 @@
 import { MapPin, Navigation, Search } from 'lucide-react';
 import { useState } from 'react';
+import { api } from "../api";
 
 interface PassengerHomeProps {
-  onFindRides: () => void;
+  onFindRides: (rideId: number, pickup: string, destination: string) => void;
 }
 
 export function PassengerHome({ onFindRides }: PassengerHomeProps) {
   const [pickup, setPickup] = useState('');
   const [destination, setDestination] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleFindRides = async () => {
+    if (!pickup || !destination) return;
+    
+    setLoading(true);
+    setError('');
+    
+    try {
+      const ride = await api.requestRide({
+        passengerName: 'Passenger',
+        passengerPhone: '9999999999',
+        pickup,
+        destination,
+        vehicleType: 'Auto Rickshaw'
+      });
+      
+      onFindRides(ride.id, pickup, destination);
+    } catch (err) {
+      setError('Could not connect to server. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -94,10 +120,15 @@ export function PassengerHome({ onFindRides }: PassengerHomeProps) {
           </div>
         </div>
 
+        {/* Error message */}
+        {error && (
+          <p className="mb-4 text-red-500 text-sm text-center">{error}</p>
+        )}
+
         {/* Find Rides Button */}
         <button
-          onClick={onFindRides}
-          disabled={!pickup || !destination}
+          onClick={handleFindRides}
+          disabled={!pickup || !destination || loading}
           className="w-full flex items-center justify-center gap-2 text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           style={{
             fontFamily: 'Roboto, sans-serif',
@@ -109,7 +140,7 @@ export function PassengerHome({ onFindRides }: PassengerHomeProps) {
           }}
         >
           <Search className="w-5 h-5" />
-          Find Rides
+          {loading ? 'Finding Rides...' : 'Find Rides'}
         </button>
       </div>
 
@@ -122,7 +153,6 @@ export function PassengerHome({ onFindRides }: PassengerHomeProps) {
           Recent Destinations
         </h3>
         
-        {/* Recent trip cards */}
         {['MG Road, Bangalore', 'Indiranagar Metro Station', 'Koramangala 5th Block'].map((location, index) => (
           <button
             key={index}

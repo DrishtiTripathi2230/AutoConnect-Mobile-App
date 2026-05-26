@@ -35,6 +35,10 @@ export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('splash');
   const [isMinor, setIsMinor] = useState(false);
   const [userRole, setUserRole] = useState<'passenger' | 'driver' | null>(null);
+  const [currentRideId, setCurrentRideId] = useState<number | null>(null);
+  const [ridePickup, setRidePickup] = useState('');
+  const [rideDestination, setRideDestination] = useState('');
+  const [backendConnected, setBackendConnected] = useState(false);
 
   const renderScreen = () => {
     switch (currentScreen) {
@@ -76,7 +80,17 @@ export default function App() {
         return <KidSafetySetup onComplete={() => setCurrentScreen('passengerHome')} />;
       
       case 'passengerHome':
-        return <PassengerHome onFindRides={() => setCurrentScreen('vehicleSelection')} />;
+        return (
+          <PassengerHome 
+            onFindRides={(rideId, pickup, destination) => {
+              setCurrentRideId(rideId);
+              setRidePickup(pickup);
+              setRideDestination(destination);
+              setBackendConnected(true);
+              setCurrentScreen('vehicleSelection');
+            }} 
+          />
+        );
       
       case 'vehicleSelection':
         return <VehicleSelection onRequestRide={() => setCurrentScreen('findingDriver')} />;
@@ -116,7 +130,6 @@ export default function App() {
   const showHomeButton = currentScreen === 'passengerHome' || currentScreen === 'driverDashboard';
 
   const handleBack = () => {
-    // Define navigation paths
     const backPaths: Record<Screen, Screen> = {
       splash: 'splash',
       onboarding: 'onboarding',
@@ -133,7 +146,6 @@ export default function App() {
       driverDashboard: 'roleSelection',
       driverRideInProgress: 'driverDashboard',
     };
-
     setCurrentScreen(backPaths[currentScreen]);
   };
 
@@ -147,7 +159,6 @@ export default function App() {
 
   return (
     <div className="relative" style={{ fontFamily: 'Roboto, sans-serif' }}>
-      {/* Mobile Frame Container */}
       <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
         <div 
           className="relative bg-white shadow-2xl overflow-hidden"
@@ -216,7 +227,6 @@ export default function App() {
             {renderScreen()}
           </div>
 
-          {/* Home Indicator (iOS style) */}
           <div 
             className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-gray-800 rounded-full"
             style={{ width: '140px', height: '5px' }}
@@ -224,7 +234,7 @@ export default function App() {
         </div>
       </div>
 
-      {/* Screen Info - Demo Helper */}
+      {/* Status Panel */}
       <div 
         className="fixed bottom-6 right-6 bg-white shadow-lg p-4 max-w-xs"
         style={{ borderRadius: '12px', border: '2px solid #e0e0e0' }}
@@ -233,22 +243,38 @@ export default function App() {
           className="mb-2 text-gray-800"
           style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 600, fontSize: '14px' }}
         >
-          📱 AutoConnect Prototype
+          📱 AutoConnect
         </h4>
         <p 
-          className="text-gray-600 mb-2"
+          className="text-gray-600 mb-1"
           style={{ fontFamily: 'Roboto, sans-serif', fontSize: '12px' }}
         >
           Current: <strong>{currentScreen}</strong>
         </p>
-        <p 
-          className="text-gray-500"
-          style={{ fontFamily: 'Roboto, sans-serif', fontSize: '11px', lineHeight: '1.4' }}
-        >
-          Navigate through the app to see passenger and driver flows. All interactions are simulated.
-        </p>
+        {backendConnected && currentRideId && (
+          <p 
+            className="text-green-600 mb-1"
+            style={{ fontFamily: 'Roboto, sans-serif', fontSize: '12px' }}
+          >
+            ✅ Backend Connected | Ride #{currentRideId}
+          </p>
+        )}
+        {ridePickup && (
+          <p 
+            className="text-gray-500"
+            style={{ fontFamily: 'Roboto, sans-serif', fontSize: '11px' }}
+          >
+            {ridePickup} → {rideDestination}
+          </p>
+        )}
         <button
-          onClick={() => setCurrentScreen('roleSelection')}
+          onClick={() => {
+            setCurrentScreen('roleSelection');
+            setCurrentRideId(null);
+            setRidePickup('');
+            setRideDestination('');
+            setBackendConnected(false);
+          }}
           className="mt-3 w-full text-white"
           style={{
             fontFamily: 'Roboto, sans-serif',
