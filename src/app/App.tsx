@@ -116,7 +116,10 @@ export default function App() {
         return <DriverSignup onComplete={() => setCurrentScreen('driverDashboard')} />;
       
       case 'driverDashboard':
-        return <DriverDashboard onViewRideRequest={() => setCurrentScreen('driverRideInProgress')} />;
+         return <DriverDashboard onViewRideRequest={(rideId) => {
+         setCurrentRideId(rideId);
+         setCurrentScreen('driverRideInProgress');
+         }} />;
       
       case 'driverRideInProgress':
         return <DriverRideInProgress onCompleteRide={() => setCurrentScreen('driverDashboard')} />;
