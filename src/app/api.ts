@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = 'https://autoconnect-backend-production.up.railway.app';
 
 export const api = {
   registerDriver: async (driverData: any) => {
