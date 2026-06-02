@@ -15,7 +15,7 @@ This project was originally built as a **UI/UX prototype in December 2025** with
 | Before (Dec 2025) | After (May 2026) |
 |---|---|
 | Pure HTML/CSS/JS prototype | Spring Boot backend + REST APIs |
-| No database | H2 database saving real data |
+| No database | PostgreSQL database saving real data |
 | Simulated interactions | Real ride booking flow |
 | No deployment | Live on Railway + Vercel |
 | No validation | Phone, name, document validation |
@@ -31,7 +31,7 @@ This project was originally built as a **UI/UX prototype in December 2025** with
 
 ### Backend
 - Java, Spring Boot, Spring Data JPA
-- H2 Database, REST APIs
+- PostgreSQL, REST APIs
 - Deployed on **Railway**
 
 ---
